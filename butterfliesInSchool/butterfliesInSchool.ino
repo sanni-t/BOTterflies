@@ -4,7 +4,7 @@
 #define SETA_CW  3
 #define SETA_CC  5
 #define SETB_CW  9
-#define SETB_CC  6  
+#define SETB_CC  6
 #define SETC_CW  10
 #define SETC_CC  13
 
@@ -15,7 +15,7 @@
 #define HI_INTENSITY   90
 #define TEST_CASE     100
 
-byte fly_en[] = {8, 4, 7, 12, 11, 2}; 
+byte fly_en[] = {8, 4, 7, 12, 11, 2};
 byte motionIntensityLevel = 0;
 byte activeFlyNumber = 0;
 byte fliesStatus = 0x00;
@@ -29,23 +29,23 @@ void setup() {
     pinMode(fly_en [i], OUTPUT);
     digitalWrite(fly_en[i], LOW);
   }
-  
+  analogWrite(SETA_CW, 150);
   analogWrite(SETA_CW, 0);
   analogWrite(SETA_CC, 0);
   analogWrite(SETB_CW, 0);
   analogWrite(SETB_CC, 0);
   analogWrite(SETC_CW, 0);
   analogWrite(SETC_CC, 0);
-  
+
   Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly: 
+  // put your main code here, to run repeatedly:
   if(Serial.available())
   {
     serialInput = Serial.read();
-   
+
     switch(serialInput)
     {
       case LOW_INTENSITY:
@@ -61,22 +61,22 @@ void loop() {
         digitalWrite(fly_en[5], HIGH);
         runSetA();
         runSetB();
-        runSetC(); 
+        runSetC();
         digitalWrite(fly_en[5], LOW);
         break;
       default:
         motionIntensityLevel = 0;
     }
-  
+
 
 	  if(motionIntensityLevel != 0)
 	    flutterTheFlies();
 	  //Flush out the serial buffer
-	  while(Serial.available() > 0) 
+	  while(Serial.available() > 0)
 	  {
 	      Serial.read();
 	  }
-  }    
+  }
 }
 
 void flutterTheFlies()
@@ -90,17 +90,17 @@ void flutterTheFlies()
         do
         {
           activeFlyNumber = (byte)random(1,6);
-          temp = fliesStatus | (1 << activeFlyNumber); 
+          temp = fliesStatus | (1 << activeFlyNumber);
         }
         while(temp == fliesStatus );  //Try again if same number is picked
-        
+
         fliesStatus |= (1 << activeFlyNumber);
         //Temporary workaround for having two flies connected to same enable pin (micro pin 12)
         if(activeFlyNumber == 3)
         {
            Serial.write(activeFlyNumber);  //Send fly number to processing via MAX
-           Serial.write(5);  
-        } 
+           Serial.write(5);
+        }
         else if(activeFlyNumber == 5)
         {
           Serial.write(6);
@@ -128,17 +128,17 @@ void flutterTheFlies()
         do
         {
           activeFlyNumber = (byte)random(1,6);
-          temp = fliesStatus | (1 << activeFlyNumber); 
+          temp = fliesStatus | (1 << activeFlyNumber);
         }
         while(temp == fliesStatus );  //Try again if same number is picked
-        
+
         fliesStatus |= (1 << activeFlyNumber);
         //Temporary workaround for having two flies connected to same enable pin (micro pin 12)
         if(activeFlyNumber == 3)
         {
            Serial.write(activeFlyNumber);  //Send fly number to processing via MAX
-           Serial.write(5);  
-        } 
+           Serial.write(5);
+        }
         else if(activeFlyNumber == 5)
         {
           Serial.write(6);
@@ -167,8 +167,8 @@ void flutterTheFlies()
         if(activeFlyNumber == 3)
         {
            Serial.write(activeFlyNumber);  //Send fly number to processing via MAX
-           Serial.write(5);  
-        } 
+           Serial.write(5);
+        }
         else if(activeFlyNumber == 5)
         {
           Serial.write(6);
@@ -273,7 +273,7 @@ void runSetC()
 {
   uint16_t pulseWidth = 20;
   analogWrite(SETC_CW, 0);
-  
+
   //Ramp up
   for(int i = 1; i <= 8; i++)
   {
