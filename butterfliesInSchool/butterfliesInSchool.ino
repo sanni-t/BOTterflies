@@ -26,7 +26,7 @@ void setup() {
   // put your setup code here, to run once:
   for(int i = 0; i < FLY_NUM-1 ; i++)  //7 flies but two have common enable pin
   {
-    pinMode(fly_en [i], OUTPUT);
+    pinMode(fly_en [i], OUTPUT)
     digitalWrite(fly_en[i], LOW);
   }
   analogWrite(SETA_CW, 150);
